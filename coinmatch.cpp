@@ -214,6 +214,9 @@ int main(int argc, char * argv[]){
     aoutfile.close();
     boutfile.close();
     
+    //input_filename,// alice_singles, bob_singles, coincidence_window(ps), coincidence_count, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%), bob_effeciency(%) 
+    printf("%d,%d,%d,%d,%d,%d,%f,%d,%d,%f,%f\n",int(ia),int(ib),(int)cwindow,coincount,basis_match_count,error_count,(error_count *1.0)/basis_match_count,hv_count,ad_count,(coincount*100.0)/ia,(coincount*100.0)/ib);
+    /*
     printf("Total coincidences found = %d\n",coincount);
     printf("Coincidence Windowv(ns) = %f\n\n",cwindow/1000.0);
     printf("Total Basis matched coincidence count = %d\n",basis_match_count);
@@ -225,6 +228,6 @@ int main(int argc, char * argv[]){
     printf("Item scanned \tia=%d, ib=%d\n",(int)ia,(int)ib );
     printf("Alice effeciency \t= %f%%\n",(coincount*100.0)/ia);
     printf("Bob effeciency \t= %f%%\n",(coincount*100.0)/ib);
-
+    */
     return 0;
 }

@@ -17,11 +17,11 @@ int main(int argc, char* argv[]) {
         exit(0);
     }
     char infile_name[256];
-    printf("here! \n");
+    //printf("here! \n");
     //FileReader reader("./swabian/20200714_Swabian_Timestamp/data_2/4_1uW10dB.1.ttbin");
     sprintf(infile_name,"%s/%s",argv[1],argv[2]);
 
-    printf ("input file : %s\n",infile_name);
+    //printf ("input file : %s\n",infile_name);
     FileReader reader(infile_name);
     //exit(0);
 
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     sprintf(alice_file_name,"%s/%s",argv[3],"alice.out");
     sprintf(bob_file_name,"%s/%s",argv[3],"bob.out");
     
-    printf("alice file: %s\n",alice_file_name);
+    //printf("alice file: %s\n",alice_file_name);
 
 
     FILE * bob_outfile;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     long long channel; 
     int acount=0;
     int bcount = 0;
-    printf("here! ");
+    //printf("here! ");
     while (reader.hasData()) {
 
         // read one chunk of tags into the local buffer
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 
     fclose(alice_outfile);
     fclose(bob_outfile);
-    printf("\n\n acount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
+    //printf("\n\n acount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
     return 0;
 }
 

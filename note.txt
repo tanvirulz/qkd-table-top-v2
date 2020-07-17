@@ -5,3 +5,7 @@ g++ readRawSwabian.cpp -I /usr/include/timetagger -l TimeTagger  -o rrswabian
 
 ./corrtt ./14july0db alice.out alice_corrected.out 1000 2000 4500 3000
 ./corrtt ./14july0db bob.out bob_corrected.out 0 0 0 3000
+
+./run.sh ./swabian/20200714_Swabian_Timestamp/data_2 4_1uW0dB.1.ttbin 14july0db 
+
+./run.sh ./swabian/20200714_Swabian_Timestamp/test
