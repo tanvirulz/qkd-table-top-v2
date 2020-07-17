@@ -14,9 +14,13 @@
 
 using namespace std;
 
-int main(){
+int main(int argc, char * argv[]){
     char inBuffer[BUFFER_SIZE];
     char outBuffer[BUFFER_SIZE];
+
+    char infile_name[256];
+    char outfile_name[256];
+
     uint64_t raw_ts; //rawtimestamp
     uint64_t corrected_ts;
     uint64_t detector;
@@ -29,19 +33,44 @@ int main(){
     cA=0;
     cD=0;
 
+    if (argc < 7) {
+        printf("crt [work directory] [player name] [corrH] [corrV] [corrA] [corrD]\n");
+        exit(0);
+    }
+    //8th july data
     //alice correction 
     //cH=0;cV=1*500;cA=2*500+5*500;cD=5*500;
     //bob correction 
-    cH=0;cV=0;cA=7*500;cD=0;
+    //cH=0;cV=0;cA=7*500;cD=0;
+
+    //14th july data
+    //alice correction
+
+    //cH=2*500;cV=4*500;cA=6*500+3*500;cD=3*500+3*500;
+    //bob correction
+    //cH=0;cV=0;cA=0;cD=6*500;
 
     ifstream infile;
     ofstream outfile;
 
+
     infile.rdbuf()->pubsetbuf(inBuffer, BUFFER_SIZE);
     outfile.rdbuf()->pubsetbuf(outBuffer, BUFFER_SIZE);
 
-    infile.open("./testdata/bob.out", ios::in|ios::binary);
-    outfile.open("./testdata/bob_corrected.out",ios::out|ios::binary|ios::trunc);
+
+    sprintf(infile_name,"%s/%s.out",argv[1],argv[2]);
+    sprintf(outfile_name,"%s/%s_corrected.out",argv[1],argv[2]);
+    
+    sscanf(argv[3],"%" SCNd64,&cH);
+    sscanf(argv[4],"%" SCNd64,&cV);
+    sscanf(argv[5],"%" SCNd64,&cA);
+    sscanf(argv[6],"%" SCNd64,&cD);
+    
+
+    //infile.open("./output/alice.out", ios::in|ios::binary);
+    //outfile.open("./output/alice_corrected.out",ios::out|ios::binary|ios::trunc);
+    infile.open(infile_name, ios::in|ios::binary);
+    outfile.open(outfile_name,ios::out|ios::binary|ios::trunc);
 
     while( 1 ){
         infile.read(reinterpret_cast<char *>(&raw_ts),sizeof(raw_ts));

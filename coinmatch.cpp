@@ -16,10 +16,12 @@
 #define AD_BASIS 3
 #define HV_BASIS 12
 
+#define FILE_NAME_SIZE 256
+
 
 using namespace std;
 
-int main(){
+int main(int argc, char * argv[]){
     char ainBuffer[BUFFER_SIZE];
     char binBuffer[BUFFER_SIZE];
     char aoutBuffer[BUFFER_SIZE];
@@ -33,7 +35,6 @@ int main(){
     uint64_t b_det;
     
     int64_t cwindow;
-
     int64_t shift;
     int64_t diff;
 
@@ -44,6 +45,7 @@ int main(){
 
     int coincount;
     int basis_match_count;
+    int error_count;
     uint8_t basis_match_flag;
 
     
@@ -53,28 +55,62 @@ int main(){
     ofstream boutfile;
     ofstream basis_match_outfile;
 
+    char ainfile_name[FILE_NAME_SIZE];
+    char binfile_name[FILE_NAME_SIZE];
+    char aoutfile_name[FILE_NAME_SIZE];
+    char boutfile_name[FILE_NAME_SIZE];
+    char basis_match_oufile_name[FILE_NAME_SIZE];
 
+    if (argc<3){
+        printf("cm [workdirectory] [coincidence windo in ps]\n");
+        exit(0);
+    }
     ainfile.rdbuf()->pubsetbuf(ainBuffer, BUFFER_SIZE);
     binfile.rdbuf()->pubsetbuf(binBuffer, BUFFER_SIZE);
     aoutfile.rdbuf()->pubsetbuf(aoutBuffer, BUFFER_SIZE);
     boutfile.rdbuf()->pubsetbuf(boutBuffer, BUFFER_SIZE);
     basis_match_outfile.rdbuf()->pubsetbuf(basismatchBuffer, BUFFER_SIZE);
 
+    sprintf(ainfile_name,"%s/%s",argv[1],"alice_corrected.out");
+    sprintf(binfile_name,"%s/%s",argv[1],"bob_corrected.out");
 
-    ainfile.open("./testdata/alice_corrected.out", ios::in|ios::binary);
-    binfile.open("./testdata/bob_corrected.out", ios::in|ios::binary);
+    sprintf(aoutfile_name,"%s/%s",argv[1],"alice_coin.out");
+    sprintf(boutfile_name,"%s/%s",argv[1],"bob_coin.out");
+    sprintf(basis_match_oufile_name,"%s/%s",argv[1],"basis_match_bitmask.out");
 
-    aoutfile.open("./testdata/alice_coin.out",ios::out|ios::binary|ios::trunc);
-    boutfile.open("./testdata/bob_coin.out",ios::out|ios::binary|ios::trunc);
-    basis_match_outfile.open("./testdata/basis_match_bitmask.out",ios::out|ios::binary|ios::trunc);
     
+    /*
+    ainfile.open("./14july0db/alice_corrected.out", ios::in|ios::binary);
+    binfile.open("./14july0db/bob_corrected.out", ios::in|ios::binary);
+
+    aoutfile.open("./14july0db/alice_coin.out",ios::out|ios::binary|ios::trunc);
+    boutfile.open("./14july0db/bob_coin.out",ios::out|ios::binary|ios::trunc);
+    basis_match_outfile.open("./14july0db/basis_match_bitmask.out",ios::out|ios::binary|ios::trunc);
+    */
+    ainfile.open(ainfile_name, ios::in|ios::binary);
+    binfile.open(binfile_name, ios::in|ios::binary);
+
+    aoutfile.open(aoutfile_name,ios::out|ios::binary|ios::trunc);
+    boutfile.open(boutfile_name,ios::out|ios::binary|ios::trunc);
+    basis_match_outfile.open(basis_match_oufile_name,ios::out|ios::binary|ios::trunc);
+    
+
     basis_match_flag =  0;
     basis_match_count = 0;
     ia = 0;
     ib = 0;
-    shift = -9*500;
-    cwindow = 500;
+
+    //8th july data
+    //shift = -9*500;
+    //cwindow = 500;
+
+    //14th july data
+    shift = -7*500;
+    //cwindow = 1500;
+    sscanf(argv[2],"%" SCNd64,&cwindow);
     coincount = 0;
+    error_count = 0;
+   
 
     ainfile.read(reinterpret_cast<char *>(&a_ts),sizeof(a_ts));
     if (ainfile.eof()) exit(0); // EOF can only be detected after the final *failed* read attempt. 
@@ -114,11 +150,14 @@ int main(){
                 basis_match_flag = 1;
                 basis_match_count ++;
                 hv_count ++;
+                if (a_det != b_det) error_count ++;
+
             }
             else if( (a_det & uint64_t(HV_BASIS)) && (b_det & uint16_t(HV_BASIS)) ){
                 basis_match_flag = 1;
                 basis_match_count ++;
                 ad_count ++;
+                if (a_det != b_det ) error_count ++; 
             }
             else {
                 basis_match_flag = 0;
@@ -135,18 +174,15 @@ int main(){
             ib+=1;
             
             ainfile.read(reinterpret_cast<char *>(&a_ts),sizeof(a_ts));
-            if (ainfile.eof()) exit(0); // EOF can only be detected after the final *failed* read attempt. 
+            if (ainfile.eof()) break; // EOF can only be detected after the final *failed* read attempt. 
             a_det = a_ts & uint64_t (0xF);
             a_ts = a_ts>>4;
             
 
             binfile.read(reinterpret_cast<char *>(&b_ts),sizeof(b_ts));
-            if (binfile.eof()) exit(0);
+            if (binfile.eof()) break;
             b_det = b_ts & uint64_t (0xF);
             b_ts = b_ts >>4;
-            
-            
-
                     
         }
         else if (diff>cwindow){
@@ -168,7 +204,7 @@ int main(){
         else{
             printf ("ERROR! I should not be here.\n");
 
-            exit(0);
+            break;
         }
         //debugloopcount ++;
     }
@@ -178,14 +214,17 @@ int main(){
     aoutfile.close();
     boutfile.close();
     
-    printf("Total coincidences found = %d\n\n",coincount);
-    
+    printf("Total coincidences found = %d\n",coincount);
+    printf("Coincidence Windowv(ns) = %f\n\n",cwindow/1000.0);
     printf("Total Basis matched coincidence count = %d\n",basis_match_count);
-    printf("hv_count = %d\n",hv_count);
-    printf("ad_count = %d\n",ad_count);
-    printf("hv+ad counts = %d\n\n",hv_count+ad_count);
-    printf("Item scanned ia = %d,ib=%d\n",(int)ia,(int)ib );
-
+    printf("Error count on matched basis = %d\n\n",error_count);
+    printf("QBER \t= %f%%\n\n",(error_count *100.0)/basis_match_count);
+    printf("hv_count \t= %d\n",hv_count);
+    printf("ad_count \t= %d\n",ad_count);
+    printf("hv+ad counts \t= %d\n\n",hv_count+ad_count);
+    printf("Item scanned \tia=%d, ib=%d\n",(int)ia,(int)ib );
+    printf("Alice effeciency \t= %f%%\n",(coincount*100.0)/ia);
+    printf("Bob effeciency \t= %f%%\n",(coincount*100.0)/ib);
 
     return 0;
 }

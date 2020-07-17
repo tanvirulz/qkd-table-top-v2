@@ -17,9 +17,11 @@
 #define AD_BASIS 3
 #define HV_BASIS 12
 
+#define FILE_NAME_SIZE 256
+
 using namespace std;
 
-int main(){
+int main(int argc, char* argv[]){
     char stampsBuffer[BUFFER_SIZE];
     char coin_indexBuffer[BUFFER_SIZE];
     char bimask_Buffer[BUFFER_SIZE];
@@ -45,20 +47,42 @@ int main(){
 
     ofstream rawkey_outfile;
     
+    char stamps_infile_name[FILE_NAME_SIZE];
+    char coin_index_infile_name[FILE_NAME_SIZE];
+    char bitmap_infile_name[FILE_NAME_SIZE];
+    char rawkey_outfile_name[FILE_NAME_SIZE];
 
 
 
+    if(argc<3){
+        printf("sift [workfolder] [player name]");
+        exit(0);
+    }
+
+    sprintf(stamps_infile_name,"%s/%s_corrected.out",argv[1],argv[2]);
+    sprintf(coin_index_infile_name,"%s/%s_coin.out",argv[1],argv[2]);
+    sprintf(bitmap_infile_name,"%s/%s",argv[1],"basis_match_bitmask.out");
+    sprintf(rawkey_outfile_name,"%s/%s_rawkey.txt",argv[1],argv[2]);
+    
+    
     stamps_infile.rdbuf()->pubsetbuf(stampsBuffer, BUFFER_SIZE);
     coin_index_infile.rdbuf()->pubsetbuf(coin_indexBuffer, BUFFER_SIZE);
     bitmap_infile.rdbuf()->pubsetbuf(bimask_Buffer, BUFFER_SIZE);
 
     rawkey_outfile.rdbuf()->pubsetbuf(rawkey_Buffer, BUFFER_SIZE);
 
-    stamps_infile.open("./testdata/bob_corrected.out", ios::in|ios::binary);
-    coin_index_infile.open("./testdata/bob_coin.out", ios::in|ios::binary);
-    bitmap_infile.open("./testdata/basis_match_bitmask.out",ios::in|ios::binary);
+    /*
+    stamps_infile.open("./output/bob_corrected.out", ios::in|ios::binary);
+    coin_index_infile.open("./output/bob_coin.out", ios::in|ios::binary);
+    bitmap_infile.open("./output/basis_match_bitmask.out",ios::in|ios::binary);
 
-    rawkey_outfile.open("./testdata/bob_rawkey.txt",ios::out|ios::binary|ios::trunc);
+    rawkey_outfile.open("./output/bob_rawkey.txt",ios::out|ios::binary|ios::trunc);
+    */
+    stamps_infile.open(stamps_infile_name, ios::in|ios::binary);
+    coin_index_infile.open(coin_index_infile_name, ios::in|ios::binary);
+    bitmap_infile.open(bitmap_infile_name,ios::in|ios::binary);
+
+    rawkey_outfile.open(rawkey_outfile_name,ios::out|ios::binary|ios::trunc);
     
     matched_index = 0;
     ts_index = 0;
