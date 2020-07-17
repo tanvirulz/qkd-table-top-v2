@@ -1,0 +1,2 @@
+g++ process_tags_from_disc.cpp -I /usr/include/timetagger -l TimeTagger 
+g++ readRawSwabian.cpp -I /usr/include/timetagger -l TimeTagger 
