@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <inttypes.h>
+#include <math.h>
 //#include <stdlib.h> 
 
 #define BUFFER_SIZE (32*1024)
@@ -33,6 +34,10 @@ int main(int argc, char * argv[]){
     uint64_t b_ts;
     uint64_t a_det;
     uint64_t b_det;
+    uint64_t begin_time;
+    uint64_t end_time;
+    
+    double duration;
     
     int64_t cwindow;
     int64_t shift;
@@ -61,8 +66,8 @@ int main(int argc, char * argv[]){
     char boutfile_name[FILE_NAME_SIZE];
     char basis_match_oufile_name[FILE_NAME_SIZE];
 
-    if (argc<3){
-        printf("cm [workdirectory] [coincidence windo in ps]\n");
+    if (argc<4){
+        printf("cm [workdirectory] [coincidence windo in ps] [crosscorrelation shift]\n");
         exit(0);
     }
     ainfile.rdbuf()->pubsetbuf(ainBuffer, BUFFER_SIZE);
@@ -105,7 +110,8 @@ int main(int argc, char * argv[]){
     //cwindow = 500;
 
     //14th july data
-    shift = -7*500;
+    //shift = -7*500;
+    sscanf(argv[2],"%" SCNd64,&shift);
     //cwindow = 1500;
     sscanf(argv[2],"%" SCNd64,&cwindow);
     coincount = 0;
@@ -116,7 +122,7 @@ int main(int argc, char * argv[]){
     if (ainfile.eof()) exit(0); // EOF can only be detected after the final *failed* read attempt. 
     a_det  = a_ts & uint64_t(0xF);
     a_ts = a_ts>>4;
-    
+    begin_time = a_ts; 
 
     binfile.read(reinterpret_cast<char *>(&b_ts),sizeof(b_ts));
     if (binfile.eof()) exit(0);
@@ -177,7 +183,7 @@ int main(int argc, char * argv[]){
             if (ainfile.eof()) break; // EOF can only be detected after the final *failed* read attempt. 
             a_det = a_ts & uint64_t (0xF);
             a_ts = a_ts>>4;
-            
+            end_time = a_ts; 
 
             binfile.read(reinterpret_cast<char *>(&b_ts),sizeof(b_ts));
             if (binfile.eof()) break;
@@ -193,6 +199,7 @@ int main(int argc, char * argv[]){
             if (ainfile.eof()) break; // EOF can only be detected after the final *failed* read attempt. 
             a_det = a_ts & uint64_t (0xF);
             a_ts = a_ts>>4;
+            end_time = a_ts;
         }
         else if ( diff < -cwindow){
             ib+=1;
@@ -206,7 +213,7 @@ int main(int argc, char * argv[]){
 
             break;
         }
-        //debugloopcount ++;
+        debugloopcount ++;
     }
     basis_match_outfile.close();
     ainfile.close();
@@ -214,9 +221,15 @@ int main(int argc, char * argv[]){
     aoutfile.close();
     boutfile.close();
     
-    //input_filename,// alice_singles, bob_singles, coincidence_window(ps), coincidence_count, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%), bob_effeciency(%) 
-    printf("%d,%d,%d,%d,%d,%d,%f,%d,%d,%f,%f\n",int(ia),int(ib),(int)cwindow,coincount,basis_match_count,error_count,(error_count *1.0)/basis_match_count,hv_count,ad_count,(coincount*100.0)/ia,(coincount*100.0)/ib);
-    /*
+    duration = (end_time  - begin_time) * pow(10.0,-12);
+
+    
+
+    //input_filename,// alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%), bob_effeciency(%), duration 
+    //Alice's detection effeciency = coincidencerate / Bob's singles rate. 
+    
+    printf("%f,%f,%d,%f,%d,%d,%f,%d,%d,%f,%f,%f\n",double(ia)*1.0/duration,int(ib)*1.0/duration,(int)cwindow,double(coincount)*1.0/duration,basis_match_count,error_count,(error_count *1.0)/basis_match_count,hv_count,ad_count,(coincount*100.0)/ib,(coincount*100.0)/ia,duration);
+    
     printf("Total coincidences found = %d\n",coincount);
     printf("Coincidence Windowv(ns) = %f\n\n",cwindow/1000.0);
     printf("Total Basis matched coincidence count = %d\n",basis_match_count);
@@ -228,6 +241,6 @@ int main(int argc, char * argv[]){
     printf("Item scanned \tia=%d, ib=%d\n",(int)ia,(int)ib );
     printf("Alice effeciency \t= %f%%\n",(coincount*100.0)/ia);
     printf("Bob effeciency \t= %f%%\n",(coincount*100.0)/ib);
-    */
+    
     return 0;
 }

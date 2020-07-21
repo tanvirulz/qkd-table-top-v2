@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 
     fclose(alice_outfile);
     fclose(bob_outfile);
-    //printf("\n\n acount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
+    printf("\n\nacount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
     return 0;
 }
 

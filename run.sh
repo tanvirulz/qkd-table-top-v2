@@ -4,17 +4,24 @@ mkdir -p $3
 
 ./rrswabian $1 $2 $3
 
-./crt $3 alice 1000 2000 4500 3000
+#correction for Aaice 
+./crt $3 alice 500 1500 1500 0
 rm $3/alice.out
 
-./crt $3 bob 0 0 0 3000
+#correction for Bob
+./crt $3 bob 2500 2500 0 3000
+
 rm $3/bob.out
 
-#printf  "input_filename, alice_singles, bob_singles, coincidence_window(ps), coincidence_count, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%%), bob_effeciency(%%)\n" >> ./$3/log.txt
+if [ -z "$5" ]
+    then
+        printf  "input_filename, alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%%), bob_effeciency(%%),duration(s)\n" >> ./$3/$4
+fi 
+
 
 printf "$2," >> $3/$4
 
-./cm $3 1500 >> $3/$4
+./cm $3 1500 -6500 >> $3/$4
 
 
 #./sift $3 alice 

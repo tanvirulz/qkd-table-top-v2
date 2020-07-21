@@ -65,7 +65,7 @@ int main(int argc, char * argv[]){
     sscanf(argv[4],"%" SCNd64,&cV);
     sscanf(argv[5],"%" SCNd64,&cA);
     sscanf(argv[6],"%" SCNd64,&cD);
-    
+    printf("infile: %s\n",infile_name);
 
     //infile.open("./output/alice.out", ios::in|ios::binary);
     //outfile.open("./output/alice_corrected.out",ios::out|ios::binary|ios::trunc);
