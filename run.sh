@@ -4,13 +4,13 @@ mkdir -p $3
 
 ./rrswabian $1 $2 $3
 
-#correction for Aaice 
+#correction for Aaice ./crt [workDirectory] [H_Offset] [V_Offset] [A_Offset] [D_Offset]
 ./crt $3 alice 0 -500 0 -1000
 
 
 rm $3/alice.out
 
-#correction for Bob
+#correction for Bob ./crt [workDirectory] [H_Offset] [V_Offset] [A_Offset] [D_Offset]
 ./crt $3 bob 0 500 -2500 500
 
 rm $3/bob.out
@@ -27,6 +27,7 @@ printf "$2," >> $3/$4
 ./cm $3 2000 -5500 >> $3/$4
 
 
+#If you want the sifted key to be written in a file uncomment the two line below. 
 #./sift $3 alice 
 #./sift $3 bob 
 
