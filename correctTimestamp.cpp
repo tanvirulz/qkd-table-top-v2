@@ -26,6 +26,7 @@ int main(int argc, char * argv[]){
     uint64_t detector;
 
     int64_t cH,cV,cA,cD;
+    int64_t tmp;
     int counter=0;  //delete it
 
     cH=0;
@@ -65,7 +66,7 @@ int main(int argc, char * argv[]){
     sscanf(argv[4],"%" SCNd64,&cV);
     sscanf(argv[5],"%" SCNd64,&cA);
     sscanf(argv[6],"%" SCNd64,&cD);
-    printf("infile: %s\n",infile_name);
+    //printf("infile: %s\n",infile_name);
 
     //infile.open("./output/alice.out", ios::in|ios::binary);
     //outfile.open("./output/alice_corrected.out",ios::out|ios::binary|ios::trunc);
@@ -85,16 +86,16 @@ int main(int argc, char * argv[]){
         switch (detector)
         {
         case H:
-            corrected_ts = raw_ts + cH;
+            tmp = int64_t( int64_t( raw_ts) + cH) ;
             break;
         case V:
-            corrected_ts = raw_ts + cV;
+            tmp = int64_t( int64_t( raw_ts) + cV);
             break;
         case A:
-            corrected_ts = raw_ts + cA;
+            tmp = int64_t( int64_t( raw_ts) + cA);
             break;
         case D:
-            corrected_ts = raw_ts + cD;
+            tmp = int64_t( int64_t( raw_ts) + cD);
             break;
         
         default:
@@ -105,6 +106,10 @@ int main(int argc, char * argv[]){
             exit(1);
             break;
         }
+        if (tmp <0){
+            tmp = 0;
+        }
+        corrected_ts = uint64_t(tmp);
         corrected_ts = (corrected_ts <<4)|detector;
         outfile.write(reinterpret_cast<char *>(&corrected_ts),sizeof(corrected_ts));
         //outfile.write(reinterpret_cast<char *>(&raw_ts),sizeof(raw_ts));

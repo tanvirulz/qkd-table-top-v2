@@ -1,8 +1,8 @@
 import os
 from os import walk
-input_directory = "./swabian/20200714_Swabian_Timestamp/data_2"
-log_file_name = "result_data_2.csv"
-work_directory = "14july_data_2"
+input_directory = "./swabian/20200803_swabian_highres_highcount"
+log_file_name = "result_03Aug_cw2000ps.csv"
+work_directory = "03Aug"
 input_files = []
 for (dirpath, dirnames, filenames) in walk(input_directory):
     input_files.extend(filenames)
@@ -10,6 +10,7 @@ for (dirpath, dirnames, filenames) in walk(input_directory):
 
 os.system("mkdir -p "+work_directory)
 
+print(input_directory)
 print(input_files)
 
 fp = open(work_directory+"/"+log_file_name,"w")

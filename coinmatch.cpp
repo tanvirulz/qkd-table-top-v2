@@ -111,7 +111,7 @@ int main(int argc, char * argv[]){
 
     //14th july data
     //shift = -7*500;
-    sscanf(argv[2],"%" SCNd64,&shift);
+    sscanf(argv[3],"%" SCNd64,&shift);
     //cwindow = 1500;
     sscanf(argv[2],"%" SCNd64,&cwindow);
     coincount = 0;
@@ -132,20 +132,22 @@ int main(int argc, char * argv[]){
     int debugloopcount = 0;
     int hv_count =0;
     int ad_count =0;
+    //printf ("cwindow=%d\tshift=%d\n",(int)cwindow,(int)shift);
     while( 1 ){
         //if(debugloopcount ==34342903) break;
         //if(debugloopcount%10240 ==0) printf("debugcount at %d, coincidence count = %d\n",debugloopcount,coincount);
         //a_det = a_ts & uint64_t(0xF);
         //b_det = b_ts & uint64_t(0xF);
 
-        
+        //printf("ia= %d, ib=%d\n",(int)ia,(int)ib);
         //printf("a_ts =%" PRIu64 "\n", a_ts);
         //printf("b_ts =%" PRIu64 "\n", b_ts);
 
         diff = b_ts - a_ts + shift; 
         //printf("diff =%" PRId64 "\n\n", diff);
-
+        
         if (abs(diff)<=cwindow){
+            
             
 
             coincount +=1;
@@ -189,7 +191,9 @@ int main(int argc, char * argv[]){
             if (binfile.eof()) break;
             b_det = b_ts & uint64_t (0xF);
             b_ts = b_ts >>4;
-                    
+            
+            //debug purpose
+          
         }
         else if (diff>cwindow){
             //printf("here!\n");
@@ -213,7 +217,8 @@ int main(int argc, char * argv[]){
 
             break;
         }
-        debugloopcount ++;
+        //debugloopcount ++;
+    
     }
     basis_match_outfile.close();
     ainfile.close();
@@ -230,6 +235,7 @@ int main(int argc, char * argv[]){
     
     printf("%f,%f,%d,%f,%d,%d,%f,%d,%d,%f,%f,%f\n",double(ia)*1.0/duration,int(ib)*1.0/duration,(int)cwindow,double(coincount)*1.0/duration,basis_match_count,error_count,(error_count *1.0)/basis_match_count,hv_count,ad_count,(coincount*100.0)/ib,(coincount*100.0)/ia,duration);
     
+    /*
     printf("Total coincidences found = %d\n",coincount);
     printf("Coincidence Windowv(ns) = %f\n\n",cwindow/1000.0);
     printf("Total Basis matched coincidence count = %d\n",basis_match_count);
@@ -241,6 +247,6 @@ int main(int argc, char * argv[]){
     printf("Item scanned \tia=%d, ib=%d\n",(int)ia,(int)ib );
     printf("Alice effeciency \t= %f%%\n",(coincount*100.0)/ia);
     printf("Bob effeciency \t= %f%%\n",(coincount*100.0)/ib);
-    
+    */
     return 0;
 }

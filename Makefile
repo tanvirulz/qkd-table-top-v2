@@ -12,27 +12,29 @@ ODIR=./obj
 # nominal compile
 #default: mkobjdir nondeb mem reg  proc $(SDIR)/main.c 
 #	gcc -o run $(ODIR)/memory.o $(ODIR)/registers.o  $(ODIR)/debug.o $(ODIR)/processor.o $(SDIR)/main.c $(IFLAGS) 
-default:
+default: readRawSwabian.cpp correctTimestamp.cpp coinmatch.cpp sifting.cpp
 	$(CC) -o rrswabian readRawSwabian.cpp $(IFLAGS) $(LFLAGS)
 	$(CC) -o crt correctTimestamp.cpp 
 	$(CC) -o cm coinmatch.cpp 
 	$(CC) -o sift sifting.cpp
 
-rrswabian:
+rrswabian: readRawSwabian.cpp
 	$(CC) -o rrswabian readRawSwabian.cpp $(IFLAGS) $(LFLAGS)
 
-crt:
+crt: correctTimestamp.cpp
 	$(CC) -o crt correctTimestamp.cpp 
 
-cm:
+cm: coinmatch.cpp
 	$(CC) -o cm coinmatch.cpp 
 
-sift:
+sift: sifting.cpp
 	$(CC) -o sift sifting.cpp
 
-run: default
-	./run.sh ./swabian/20200714_Swabian_Timestamp/data_2 4_1uW0dB.1.ttbin 14july0db result.csv
-	
+run: default run.sh
+	./run.sh /home/tanvir/work/Programming/gProj/qkd-table-top-v2/swabian/20200803_swabian_highres_highcount 1_9mW0dB.1.ttbin 03Aug result.csv
+
+runbatch: default runbatch.py run.sh
+	python3 runbatch.py
 clean:
 	rm -f rrswabian
 	rm -f crt 

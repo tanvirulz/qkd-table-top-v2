@@ -74,10 +74,20 @@ int main(int argc, char* argv[]) {
                 //get my tags in local variables;
 
                 time = t.time;
+                //H V A D 
+                //5 6 7 8
+                if (t.channel==8) channel = 5;
+                else if(t.channel == 5  ) channel = 7;
+                else if (t.channel == 7) channel = 6;
+                else if (t.channel == 6) channel = 8;
+                else channel = t.channel; 
+                /*
                 // swap bob's A & D
+                // 14th July data
                 if (t.channel==7) channel = 8;
                 else if(t.channel==8) channel = 7;
                 else channel = t.channel;
+                */
             }
 
             if (channel<=4){
@@ -99,7 +109,7 @@ int main(int argc, char* argv[]) {
 
     fclose(alice_outfile);
     fclose(bob_outfile);
-    printf("\n\nacount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
+    //printf("\n\nacount = %d\nbcounr = %d\na+b = %d\n",acount,bcount,acount+bcount);
     return 0;
 }
 
