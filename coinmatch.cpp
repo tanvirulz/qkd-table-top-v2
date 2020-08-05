@@ -40,7 +40,6 @@ int main(int argc, char * argv[]){
     double duration;
     
     int64_t cwindow;
-    int64_t effective_cwindow;
     int64_t shift;
     int64_t diff;
 
@@ -114,17 +113,7 @@ int main(int argc, char * argv[]){
     //shift = -7*500;
     sscanf(argv[3],"%" SCNd64,&shift);
     //cwindow = 1500;
-    sscanf(argv[2],"%" SCNd64,&effective_cwindow);
-    
-    /*
-    *If you compare the absolute difference of two events with cwindow to detect coincidence
-    *your effective coincidence window is double the value you compare with. Because events
-    *both from forward and backward direction gets captured by the comparison. 
-    */
-    cwindow = effective_cwindow  / 2;
-
-
-
+    sscanf(argv[2],"%" SCNd64,&cwindow);
     coincount = 0;
     error_count = 0;
    
