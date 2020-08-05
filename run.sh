@@ -15,7 +15,7 @@ rm $3/alice.out
 
 rm $3/bob.out
 
-if [ -z "$5" ]
+if [ -z "$6" ]
     then
         printf  "input_filename, alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%%), bob_effeciency(%%),duration(s)\n" > ./$3/$4
 fi 
@@ -24,7 +24,7 @@ fi
 printf "$2," >> $3/$4
 
 # ./cm [workDirectory] [coincidenceWindow] [matchingShift]
-./cm $3 2000 -5500 >> $3/$4
+./cm $3 $5 -5500 >> $3/$4
 
 
 #If you want the sifted key to be written in a file uncomment the two line below. 

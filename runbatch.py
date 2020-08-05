@@ -1,8 +1,13 @@
 import os
 from os import walk
 input_directory = "./swabian/20200803_swabian_highres_highcount"
-log_file_name = "result_03Aug_cw2000ps.csv"
-work_directory = "03Aug"
+coincidence_window = 1000 #pico-seconds
+
+
+work_directory = "03Aug_new"
+
+log_file_name = "result_" + work_directory+"_cw"+str(coincidence_window)+"ps.csv"
+
 input_files = []
 for (dirpath, dirnames, filenames) in walk(input_directory):
     input_files.extend(filenames)
@@ -24,6 +29,6 @@ for file in input_files:
     i+=1
     #./run.sh ./swabian/20200714_Swabian_Timestamp/data_2 4_1uW0dB.1.ttbin 14july0db 
     #os.system( "print '"+file+",'>> input_directory+"/"+log_file_name")
-    os.system("./run.sh "+input_directory+" "+file+" "+work_directory+" "+log_file_name+" "+"runbatch")
+    os.system("./run.sh "+input_directory+" "+file+" "+work_directory+" "+log_file_name+" "+str(coincidence_window)+" "+"runbatch")
     print (file,"Done")
     

@@ -31,7 +31,7 @@ sift: sifting.cpp
 	$(CC) -o sift sifting.cpp
 
 run: default run.sh
-	./run.sh /home/tanvir/work/Programming/gProj/qkd-table-top-v2/swabian/20200803_swabian_highres_highcount 1_9mW0dB.1.ttbin 03Aug result.csv
+	./run.sh /home/tanvir/work/Programming/gProj/qkd-table-top-v2/swabian/20200803_swabian_highres_highcount 1_9mW0dB.1.ttbin 03Aug result.csv 1500
 
 runbatch: default runbatch.py run.sh
 	python3 runbatch.py
