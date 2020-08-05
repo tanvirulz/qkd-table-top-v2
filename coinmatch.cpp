@@ -146,7 +146,7 @@ int main(int argc, char * argv[]){
         diff = b_ts - a_ts + shift; 
         //printf("diff =%" PRId64 "\n\n", diff);
         
-        if (abs(diff)<=cwindow){
+        if (abs(diff)<=cwindow/2){
             
             
 
@@ -195,7 +195,7 @@ int main(int argc, char * argv[]){
             //debug purpose
           
         }
-        else if (diff>cwindow){
+        else if (diff>cwindow/2){
             //printf("here!\n");
             //printf("cwindow =%" PRId64 "\n\n", cwindow);
             ia+=1;
@@ -205,7 +205,7 @@ int main(int argc, char * argv[]){
             a_ts = a_ts>>4;
             end_time = a_ts;
         }
-        else if ( diff < -cwindow){
+        else if ( diff < -cwindow/2){
             ib+=1;
             binfile.read(reinterpret_cast<char *>(&b_ts),sizeof(b_ts));
             if (binfile.eof()) break;
