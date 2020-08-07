@@ -132,6 +132,8 @@ int main(int argc, char * argv[]){
     int debugloopcount = 0;
     int hv_count =0;
     int ad_count =0;
+    int hv_error = 0;
+    int ad_error = 0;
     //printf ("cwindow=%d\tshift=%d\n",(int)cwindow,(int)shift);
     while( 1 ){
         //if(debugloopcount ==34342903) break;
@@ -157,15 +159,24 @@ int main(int argc, char * argv[]){
             if ( (a_det & uint64_t(AD_BASIS)) && (b_det & uint16_t(AD_BASIS) )){
                 basis_match_flag = 1;
                 basis_match_count ++;
-                hv_count ++;
-                if (a_det != b_det) error_count ++;
+
+                 
+                ad_count ++;
+                if (a_det != b_det) {
+                    error_count ++;
+                    ad_error ++;
+                }
 
             }
             else if( (a_det & uint64_t(HV_BASIS)) && (b_det & uint16_t(HV_BASIS)) ){
                 basis_match_flag = 1;
                 basis_match_count ++;
-                ad_count ++;
-                if (a_det != b_det ) error_count ++; 
+                hv_count ++;
+                if (a_det != b_det ){
+                    error_count ++;
+                    hv_error ++;
+                }  
+
             }
             else {
                 basis_match_flag = 0;
@@ -233,7 +244,8 @@ int main(int argc, char * argv[]){
     //input_filename,// alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%), bob_effeciency(%), duration 
     //Alice's detection effeciency = coincidencerate / Bob's singles rate. 
     
-    printf("%f,%f,%d,%f,%d,%d,%f,%d,%d,%f,%f,%f\n",double(ia)*1.0/duration,int(ib)*1.0/duration,(int)cwindow,double(coincount)*1.0/duration,basis_match_count,error_count,(error_count *1.0)/basis_match_count,hv_count,ad_count,(coincount*100.0)/ib,(coincount*100.0)/ia,duration);
+    // As of August 7, 2020 the hv detectors are connected to ad line and vice versa. So I swap the hv count and ad count order in the line of code below. 
+    printf("%f,%f,%d,%f,%d,%d,%f,%d,%d,%f,%f,%f,%f,%f\n",double(ia)*1.0/duration,int(ib)*1.0/duration,(int)cwindow,double(coincount)*1.0/duration,basis_match_count,error_count,(error_count *1.0)/basis_match_count,ad_count,hv_count,(coincount*100.0)/ib,(coincount*100.0)/ia,duration, (ad_error*1.0)/ad_count, (hv_error*1.0)/hv_count );
     
     /*
     printf("Total coincidences found = %d\n",coincount);

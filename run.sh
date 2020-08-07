@@ -17,7 +17,7 @@ rm $3/bob.out
 
 if [ -z "$6" ]
     then
-        printf  "input_filename, alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%%), bob_effeciency(%%),duration(s)\n" > ./$3/$4
+        printf  "input_filename, alice_singles_rate, bob_singles_rate, coincidence_window(ps), coincidence_count_rate, sifted_key_length, num_error, QBER, hv_count,ad_count,alice_efficiency(%%), bob_effeciency(%%),duration(s),hv_QBER,ad_qber\n" > ./$3/$4
 fi 
 
 
