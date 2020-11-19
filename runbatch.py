@@ -1,10 +1,15 @@
 import os
 from os import walk
-input_directory = "./swabian/20200803_swabian_highres_highcount"
+#input_directory = "./swabian/20200824_sample/33db"
+#input_directory = "./test"
+#input_directory = "/media/tanvir/QubeSat1_64/23_10_2020"
+#input_directory = "/media/tanvir/SpooqyLab/Table_Top_Demo/30sep2020"
+#input_directory = "/media/tanvir/QubeSat1_64/23_10_2020"
+input_directory = "./dark"
 coincidence_window = 1500 #pico-seconds
 
 
-work_directory = "03Aug_new_2"
+work_directory = "23Oct2020_dark"
 
 log_file_name = "result_" + work_directory+"_cw"+str(coincidence_window)+"ps.csv"
 
@@ -31,7 +36,7 @@ i = 0
 for file in input_files:
     if ("B.ttbin" in file):
         print (file_count-i, "files to go")
-        print ("working on: "+file,end="")
+        print ("working on: "+file)
         i+=1
         #./run.sh ./swabian/20200714_Swabian_Timestamp/data_2 4_1uW0dB.1.ttbin 14july0db 
         #os.system( "print '"+file+",'>> input_directory+"/"+log_file_name")

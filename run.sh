@@ -5,13 +5,15 @@ mkdir -p $3
 ./rrswabian $1 $2 $3
 
 #correction for Aaice ./crt [workDirectory] [H_Offset] [V_Offset] [A_Offset] [D_Offset]
-./crt $3 alice 0 -500 0 -1000
+./crt $3 alice 0 -750 -1250 -250
 
 
 rm $3/alice.out
 
 #correction for Bob ./crt [workDirectory] [H_Offset] [V_Offset] [A_Offset] [D_Offset]
-./crt $3 bob 0 500 -2500 500
+./crt $3 bob 0 0 250 250
+
+
 
 rm $3/bob.out
 
@@ -24,7 +26,7 @@ fi
 printf "$2," >> $3/$4
 
 # ./cm [workDirectory] [coincidenceWindow] [matchingShift]
-./cm $3 $5 -5500 >> $3/$4
+./cm $3 $5 -7500 >> $3/$4
 
 
 #If you want the sifted key to be written in a file uncomment the two line below. 

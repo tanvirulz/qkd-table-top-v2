@@ -76,11 +76,12 @@ int main(int argc, char* argv[]) {
                 time = t.time;
                 //H V A D 
                 //5 6 7 8
-                if (t.channel==8) channel = 5;
-                else if(t.channel == 5  ) channel = 7;
-                else if (t.channel == 7) channel = 6;
-                else if (t.channel == 6) channel = 8;
+                if (t.channel==5) channel = 7;
+                else if(t.channel == 6  ) channel = 8;
+                else if (t.channel == 7) channel = 5;
+                else if (t.channel == 8) channel = 6;
                 else channel = t.channel; 
+
                 /*
                 // swap bob's A & D
                 // 14th July data

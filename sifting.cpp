@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
     sprintf(stamps_infile_name,"%s/%s_corrected.out",argv[1],argv[2]);
     sprintf(coin_index_infile_name,"%s/%s_coin.out",argv[1],argv[2]);
     sprintf(bitmap_infile_name,"%s/%s",argv[1],"basis_match_bitmask.out");
-    sprintf(rawkey_outfile_name,"%s/%s_rawkey.txt",argv[1],argv[2]);
+    sprintf(rawkey_outfile_name,"%s/%s_sifted.txt",argv[1],argv[2]);
     
     
     stamps_infile.rdbuf()->pubsetbuf(stampsBuffer, BUFFER_SIZE);
@@ -118,16 +118,16 @@ int main(int argc, char* argv[]){
             switch (detector)
             {
                 case H:
-                    raw_bit = '0';
+                    raw_bit = 0; //perviously used '0' character encoding. 
                     break;
                 case V:
-                    raw_bit = '1';
+                    raw_bit = 1;
                     break;
                 case A:
-                    raw_bit = '0';
+                    raw_bit = 0;
                     break;
                 case D:
-                    raw_bit = '1';
+                    raw_bit = 1;
                     break;
                 
                 default:
